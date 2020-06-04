@@ -1,0 +1,11 @@
+.vs/
+.vscode/
+.DS_Store
+
+app/
+obj/
+bin/
+/**/coverage*.xml
+/TestResults
+/**/coveragereport
+Nuget.Config
