@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace okta_integration_demo.Dtos
+namespace okta_integration_demo.Dtos.User
 {
     /// <summary>
     /// UserDto

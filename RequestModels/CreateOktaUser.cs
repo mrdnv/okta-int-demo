@@ -1,9 +1,11 @@
-﻿namespace okta_integration_demo.Dtos
-{
+﻿using okta_integration_demo.Dtos.User;
+
+namespace okta_integration_demo.RequestModels
+{ 
     /// <summary>
     /// 
     /// </summary>
-    public class CreateOktaUserDto
+    public class CreateOktaUser
     {
         /// <summary>
         /// Gets or sets the profile.

@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using okta_integration_demo.Dtos;
+using okta_integration_demo.Dtos.User;
+using okta_integration_demo.RequestModels;
 using okta_integration_demo.Services.Interfaces;
 using System;
 using System.Net.Http;
@@ -38,7 +40,7 @@ namespace okta_integration_demo.Services
         /// <param name="userDto">The user dto.</param>
         public async Task CreateUser(OktaUserDto userDto)
         {
-            var createUser = new CreateOktaUserDto
+            var createUser = new CreateOktaUser
             {
                 Profile = userDto,
                 GroupIds = new string[] { }
@@ -51,6 +53,12 @@ namespace okta_integration_demo.Services
             var url = $"{Url}?activate=false";
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
             var response = await httpClient.PostAsync(url, content);
+        }
+
+        public async Task SendActivationEmail(string userId, bool sendEmail = true)
+        {
+            var url = $"{Url}/{userId}/lifecycle/activate?sendEmail=true";
+            var response = await httpClient.PostAsync(url, null);
         }
     }
 }

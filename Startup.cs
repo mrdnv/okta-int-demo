@@ -1,14 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Okta.AspNetCore;
 using okta_integration_demo.Services;
 using okta_integration_demo.Services.Interfaces;
@@ -27,6 +32,8 @@ namespace okta_integration_demo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            IdentityModelEventSource.ShowPII = true;
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = OktaDefaults.ApiAuthenticationScheme;
@@ -35,8 +42,18 @@ namespace okta_integration_demo
             })
             .AddOktaWebApi(new OktaWebApiOptions()
             {
-                OktaDomain = Configuration["Okta:OktaDomain"]
+                OktaDomain = Configuration["Okta:OktaDomain"],
+                Audience = "0oae3r56fv9KFSvB94x6",
+                AuthorizationServerId = "vuDemoOkta"
             });
+
+            services.AddCors(o => o.AddPolicy("AllowAll", options =>
+                options
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithExposedHeaders("Location")
+            ));
 
             services.AddControllers();
             services.AddSwagger();
@@ -63,7 +80,6 @@ namespace okta_integration_demo
             app.UseRouting();
 
             app.UseAuthentication();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -71,8 +87,6 @@ namespace okta_integration_demo
                 endpoints.MapControllers();
             });
         }
-
-        
     }
 
     public static class StartUpExtensions
