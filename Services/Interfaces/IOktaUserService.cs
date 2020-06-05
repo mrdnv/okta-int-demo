@@ -17,7 +17,7 @@ namespace okta_integration_demo.Services.Interfaces
         /// <summary>
         /// Enrolls the specified user enroll dto.
         /// </summary>
-        /// <param name="userEnrollDto">The user enroll dto.</param>
+        /// <param name="userId">The user identifier.</param>
         /// <returns></returns>
         Task SendActivationEmail(string userId);
     }
